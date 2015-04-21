@@ -40,4 +40,6 @@ plot(data_plot$year,data_plot$Emissions, type="o", ylab = "PM2.5 emitted (in ton
 print(data_plot)
 dev.off()
 
-
+data_plot <- subset(NEI, NEI$fips == "24510")
+data_plot <- aggregate(data_plot["Emissions"], by=data_plot[c("type","year")], FUN = "sum")
+qplot(year, Emissions, data = data_plot,geom = c("line", "point"), colour = type)
