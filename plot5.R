@@ -22,11 +22,13 @@ SCC <- readRDS("data/Source_Classification_Code.rds")
 
 NEI$Emissions <- as.numeric(NEI$Emissions)
 
-# Generates plot 1
-# Have total emissions from PM2.5 decreased in the United States from 1999 to 2008? 
-png(filename = "plot1.png", width = 480, height = 480, units = "px", bg = "white")
-par(mar = c(6, 6, 6, 6))
-data_plot <- aggregate(NEI["Emissions"], by = NEI["year"], FUN = "sum")
-plot(data_plot$year,data_plot$Emissions, type="o", ylab = "PM2.5 emitted (in tons)", xlab = "Year", main="Plot 1")
+# Generates plot 5
+# How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+png(filename = "plot5.png", width = 480, height = 480, units = "px", bg = "white")
+scc_lookup <- SCC[SCC["Data.Category"]=="Onroad",]
+data_plot <- subset(NEI, NEI$SCC %in% scc_lookup$SCC)
+data_plot <- subset(data_plot, data_plot$fips == "24510")
+data_plot <- aggregate(data_plot["Emissions"], by=data_plot["year"], FUN = "sum")
+plot(data_plot$year,data_plot$Emissions, type="o", ylab = "PM2.5 emitted by vehicles in Baltimore City (in tons)", xlab = "Year", main="Plot 5")
 print(data_plot)
 dev.off()

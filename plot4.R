@@ -22,11 +22,12 @@ SCC <- readRDS("data/Source_Classification_Code.rds")
 
 NEI$Emissions <- as.numeric(NEI$Emissions)
 
-# Generates plot 1
-# Have total emissions from PM2.5 decreased in the United States from 1999 to 2008? 
-png(filename = "plot1.png", width = 480, height = 480, units = "px", bg = "white")
-par(mar = c(6, 6, 6, 6))
-data_plot <- aggregate(NEI["Emissions"], by = NEI["year"], FUN = "sum")
-plot(data_plot$year,data_plot$Emissions, type="o", ylab = "PM2.5 emitted (in tons)", xlab = "Year", main="Plot 1")
+# Generates plot 4
+# Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+png(filename = "plot4.png", width = 480, height = 480, units = "px", bg = "white")
+scc_lookup <-subset(SCC[,"SCC"] , grepl("(Coal)",SCC[ ,"Short.Name"],ignore.case = TRUE))
+data_plot <- subset(NEI, NEI$SCC %in% scc_lookup)
+data_plot <- aggregate(data_plot["Emissions"], by=data_plot["year"], FUN = "sum")
+plot(data_plot$year,data_plot$Emissions, type="o", ylab = "PM2.5 emitted by coal combustion sources (in tons)", xlab = "Year", main="Plot 4")
 print(data_plot)
 dev.off()

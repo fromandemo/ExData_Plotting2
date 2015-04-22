@@ -22,11 +22,14 @@ SCC <- readRDS("data/Source_Classification_Code.rds")
 
 NEI$Emissions <- as.numeric(NEI$Emissions)
 
-# Generates plot 1
-# Have total emissions from PM2.5 decreased in the United States from 1999 to 2008? 
-png(filename = "plot1.png", width = 480, height = 480, units = "px", bg = "white")
-par(mar = c(6, 6, 6, 6))
-data_plot <- aggregate(NEI["Emissions"], by = NEI["year"], FUN = "sum")
-plot(data_plot$year,data_plot$Emissions, type="o", ylab = "PM2.5 emitted (in tons)", xlab = "Year", main="Plot 1")
+# Generates plot 3
+# Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, 
+# which of these four sources have seen decreases in emissions from 1999–2008 for Baltimore City? 
+png(filename = "plot3.png", width = 480, height = 480, units = "px", bg = "white")
+data_plot <- subset(NEI, NEI$fips == "24510")
+data_plot <- aggregate(data_plot["Emissions"], by=data_plot[c("type","year")], FUN = "sum")
+qplot(year, Emissions, data = data_plot,geom = c("line", "point"), colour = type) + ylab("PM2.5 emitted (in tons) in Baltimore City") + labs(title = "Plot 3") 
 print(data_plot)
 dev.off()
+
+
